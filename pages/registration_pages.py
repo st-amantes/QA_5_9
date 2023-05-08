@@ -1,4 +1,4 @@
-from tests.elements_test import RegistrationPage
+from functions_for_test.elements_test import RegistrationPage
 
 
 def test_complete_registration_demoqa():
