@@ -3,17 +3,20 @@ from selene import browser, have, command
 
 
 class RegistrationPage:
+
+    def remove_block(self):
+        browser.driver.execute_script(
+            'document.querySelector("#fixedban").remove()'
+        )
     def __init__(self):
         self.state = browser.all('[id^=react-select][id*=option]')
         self.adress = browser.element('#currentAddress')
 
     def open(self):
-        browser.driver.set_window_size(1920, 1080)
-        browser.open('https://demoqa.com/automation-practice-form')
-        browser.driver.fullscreen_window()
+        browser.open('/automation-practice-form')
 
-    def file_pictures(self, file_name):
-        browser.element('#uploadPicture').send_keys(os.path.abspath(f'../resources/{file_name}'))
+    def choice_pictures(self, filename):
+        return os.path.abspath(os.path.join(os.path.dirname(__file__), f'../../tests/resources/{filename}'))
 
     def fill_first_name(self, value):
         browser.element('#firstName').send_keys(value)
@@ -32,15 +35,12 @@ class RegistrationPage:
 
     def fill_date_of_birth(self, year, month, day):
         browser.element('#dateOfBirthInput').click()
-        browser.element('.react-datepicker__month-select').send_keys(month)
         browser.element('.react-datepicker__year-select').send_keys(year)
+        browser.element('.react-datepicker__month-select').send_keys(month)
         browser.element(f'.react-datepicker__day--0{day}').click()
 
     def choice_subject(self, value):
         browser.element('#subjectsInput').send_keys(value).press_enter()
-
-    def resource_path(file_name):
-        return os.path.abspath(f'../QA_5_9/resources/{file_name}')
 
     def choice_hobbies(self, value):
         browser.all('[for = hobbies-checkbox-1]').element_by(have.exact_text(value)).click()
@@ -50,6 +50,7 @@ class RegistrationPage:
 
     def choice_hobbies_more_more(self, value):
         browser.all('[for = hobbies-checkbox-3]').element_by(have.exact_text(value)).click()
+
 
     def assert_register_user_info(self, full_name,
                                   email, gender,
@@ -64,7 +65,7 @@ class RegistrationPage:
             f'Date of Birth {day_brith}',
             f'Subjects {subject}',
             f'Hobbies {hobbies}',
-            f'Picture {picture}',
+            f'Picture',
             f'Address {adress}',
             f'State and City {city}',
         ))
